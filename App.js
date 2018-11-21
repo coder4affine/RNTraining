@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, SafeAreaView } from 'react-native';
+import { Platform, StyleSheet, Text, View, SafeAreaView, StatusBar } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -62,6 +62,7 @@ export default class App extends Component<Props> {
   render() {
     return (
       <SafeAreaView style={styles.container}>
+        <StatusBar translucent backgroundColor="transparent" />
         <View style={[styles.box, styles.box1]}>
           <Text style={styles.text}>1</Text>
         </View>
