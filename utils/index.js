@@ -23,6 +23,11 @@ global.STATUSBAR_HEIGHT = Platform.OS === 'ios' ? iosStatusBarHeight : StatusBar
 
 global.wait = ms => new Promise(res => setTimeout(res, ms));
 
+global.action = (type, payload) => ({
+  type,
+  payload,
+});
+
 global.Log = ({ ...params }) => {
   if (__DEV__) console.log(params);
 };

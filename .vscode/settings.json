@@ -4,6 +4,7 @@
   "editor.snippetSuggestions": "top",
   "cSpell.words": [
     "Formik",
-    "dropdown"
+    "dropdown",
+    "reduxify"
   ]
 }

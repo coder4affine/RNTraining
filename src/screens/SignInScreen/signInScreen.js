@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { Text, AsyncStorage, SafeAreaView, Alert } from 'react-native';
+import { Text, AsyncStorage, SafeAreaView } from 'react-native';
 import SignInForm from './signInForm';
 
 import Button from '../../components/Button';
@@ -9,9 +9,9 @@ const api = user =>
   new Promise((resolve, reject) => {
     setTimeout(() => {
       if (user.username === 'yagnesh') {
-        reject({ username: 'username already use' });
+        reject(new Error(JSON.stringify({ username: 'username already use' })));
       } else {
-        resolve();
+        resolve({ token: user.username });
       }
     }, 3000);
   });
@@ -29,22 +29,14 @@ export class signInScreen extends PureComponent {
     user: { username: '', password: '' },
   };
 
-  signIn = async () => {
-    await AsyncStorage.setItem('userToken', 'yagnesh');
-    this.props.navigation.navigate('App');
-  };
-
-  navigate = path => {
-    this.props.navigation.navigate(path);
-  };
-
   _handleSubmit = async (values, bag) => {
     try {
-      await api(values);
-      Alert.alert('Welcome');
+      const token = await api(values);
+      await AsyncStorage.setItem('token', token.token);
+      this.props.navigation.navigate('App');
     } catch (error) {
       bag.setSubmitting(false);
-      bag.setErrors(error);
+      bag.setErrors(JSON.parse(error.message));
     }
   };
 
