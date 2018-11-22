@@ -22,7 +22,7 @@ module.exports = {
     StatusbarHeight: false,
     isIPhoneX: false,
     wait: false,
-    os: false
+    OS: false
   },
   plugins: ["babel", "import", "jsx-a11y", "react", "prettier"],
   parserOptions: {
