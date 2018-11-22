@@ -1,4 +1,5 @@
 import React from 'react';
+import { Animated, Easing } from 'react-native';
 import {
   createStackNavigator,
   createAppContainer,
@@ -6,14 +7,23 @@ import {
   createDrawerNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
+import StackViewStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator';
 import LoadingScreen from './screens/LoadingScreen';
 import SignInScreen from './screens/SignInScreen';
-import WelcomeScreen from './screens/WelcomeScreen';
 import SignUpScreen from './screens/SignUpScreen';
 import HomeScreen from './screens/HomeScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import DrawerScreen from './screens/DrawerScreen';
 import IconButton from './components/IconButton';
+
+const TransitionConfiguration = () => ({
+  transitionSpec: {
+    duration: 500,
+    timing: Animated.timing,
+    easing: Easing.easing,
+  },
+  screenInterpolator: StackViewStyleInterpolator.forFade,
+});
 
 const AppTab = createBottomTabNavigator({
   Home: {
@@ -43,11 +53,16 @@ const AppDrawer = createDrawerNavigator(
   },
 );
 
-const AuthStack = createStackNavigator({
-  Welcome: WelcomeScreen,
-  SignIn: SignInScreen,
-  SignUp: SignUpScreen,
-});
+const AuthStack = createStackNavigator(
+  {
+    SignIn: SignInScreen,
+    SignUp: SignUpScreen,
+  },
+  {
+    headerMode: 'screen',
+    transitionConfig: TransitionConfiguration,
+  },
+);
 
 const AppNavigator = createSwitchNavigator(
   {
