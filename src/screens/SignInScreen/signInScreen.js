@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+// import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { Text, AsyncStorage, SafeAreaView } from 'react-native';
 import SignInForm from './signInForm';
 
@@ -27,12 +29,27 @@ export class signInScreen extends PureComponent {
 
   state = {
     user: { username: '', password: '' },
+    data: null,
+    error: false,
+    loading: false,
   };
+
+  // componentWillMount() {
+  //   this.setState({ loading: true });
+  //   fetch('https://reqres.in/api/users?page=1')
+  //     .then(data => data.json())
+  //     .then(json => this.setState({ loading: false, data: json }))
+  //     .catch(err => this.setState({ loading: false, error: err }));
+  // }
 
   _handleSubmit = async (values, bag) => {
     try {
-      const token = await api(values);
-      await AsyncStorage.setItem('token', token.token);
+      this.props.signIn();
+      setTimeout(() => {
+        this.props.signInSuccess('yagnesh');
+      }, 1000);
+      // const token = await api(values);
+      // await AsyncStorage.setItem('token', token.token);
       this.props.navigation.navigate('App');
     } catch (error) {
       bag.setSubmitting(false);
@@ -41,16 +58,35 @@ export class signInScreen extends PureComponent {
   };
 
   render() {
-    const { user } = this.state;
+    const { user, data, loading, error } = this.state;
     return (
       <SafeAreaView style={{ margin: 20 }}>
         <Text> signInScreen </Text>
         <SignInForm initialValues={user} onSubmit={this._handleSubmit} />
-
+        <Text>{loading ? 'Loading...' : 'I m ready'}</Text>
+        {data && <Text>{JSON.stringify(data)}</Text>}
+        {error && <Text>{JSON.stringify(error)}</Text>}
         <Button title="Sign Up" onPress={() => this.navigate('SignUp')} />
       </SafeAreaView>
     );
   }
 }
 
-export default signInScreen;
+function mapStateToProps(state) {
+  return {
+    login: state.login,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    signIn: () => dispatch({ type: 'LOGIN', payload: null }),
+    signInSuccess: payload => dispatch({ type: 'LOGIN_SUCCESS', payload }),
+    signInError: payload => dispatch({ type: 'LOGIN_ERROR', payload }),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(signInScreen);

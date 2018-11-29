@@ -51,7 +51,7 @@ export default class picker extends Component {
                 { backgroundColor: 'rgba(0,0,0, 0.2)', justifyContent: 'flex-end' },
               ]}
             >
-              <View style={{ backgroundColor: '#fff', paddingBottom: 34 }}>
+              <View style={{ backgroundColor: '#fff', paddingBottom: isIPhoneX ? 34 : 0 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                   <Button title="Done" onPress={this.selectValue} />
                 </View>
